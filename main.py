@@ -15,52 +15,9 @@
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with the program.  If not, see <http://www.gnu.org/licenses/>.
+# along with the program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-##############################################################################
-### TASK TIME: *
-### NZBGET SCHEDULER SCRIPT
-
-# Sets speed limit based on category.
-#
-# This script monitors download queue and changes download speed limit
-# depending on category of item being currently downloaded.
-#
-# To activate the script select it in option <Extensions>. NZBGet v19 or newer is requried.
-#
-# Info about script:
-# Author: Andrey Prygunkov (nzbget@gmail.com).
-# License: GPLv3 (http://www.gnu.org/licenses/gpl.html).
-# PP-Script Version: 2.0.
-#
-# NOTE: This script requires Python 3.8+ to be installed on your system.
-
-##############################################################################
-### OPTIONS                                                                ###
-
-# Check interval (seconds).
-#Interval=5
-
-# Print more logging messages (yes, no).
-#
-# For debugging or if you need to report a bug.
-#Verbose=no
-
-# Click to test the script.
-#Test@Check now
-
-##############################################################################
-### CATEGORIES                                                             ###
-
-# Name of the category to monitor.
-#Category1.Name=
-
-# Speed limit for that category (KB).
-#Category1.DownloadRate=0
-
-### NZBGET SCHEDULER SCRIPT
-##############################################################################
 
 import os
 import sys
@@ -73,11 +30,11 @@ import base64
 SCRIPT_SUCCESS = 93
 SCRIPT_ERROR = 94
 
-# Check if the script is called from nzbget 19.0 or later
+# Check if the script is called from nzbget 23.1 or later
 nzbget_version = float(os.environ.get('NZBOP_Version', '1')[0:4])
-if nzbget_version < 19:
+if nzbget_version < 23.1:
     print('*** NZBGet extension script ***')
-    print('This script is supposed to be called from nzbget (19.0 or later).')
+    print('This script is supposed to be called from nzbget (23.1 or later).')
     sys.exit(SCRIPT_ERROR)
 
 # Check if all script options are available
