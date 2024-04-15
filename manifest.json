@@ -5,7 +5,7 @@
     "kind": "SCHEDULER",
     "displayName": "Speed Control",
     "version": "3.0",
-    "nzbgetVersion": "24",
+    "nzbgetMinVersion": "24",
     "author": "Andrey Prygunkov",
     "license": "GPLv3",
     "about": "Sets speed limit based on category.",
