@@ -16,6 +16,7 @@
 #
 
 
+import json
 import sys
 from os.path import dirname
 import os
@@ -29,89 +30,106 @@ SUCCESS = 93
 NONE = 95
 ERROR = 94
 
-root = dirname(__file__)
-test_data_dir = root + '/test_data/'
-tmp_dir = root + '/tmp/'
+ROOT_DIR = dirname(__file__)
+TEST_DATA_DIR = ROOT_DIR + "/test_data/"
+TMP_DIR = ROOT_DIR + "/tmp/"
 
-host = '127.0.0.1'
-username = 'TestUser'
-password = 'TestPassword'
-port = '6789'
+HOST = "127.0.0.1"
+USERNAME = "TestUser"
+PASSWORD = "TestPassword"
+PORT = "6789"
 
-def get_python(): 
-	if os.name == 'nt':
-		return 'python'
-	return 'python3'
+
+def get_python():
+    if os.name == "nt":
+        return "python"
+    return "python3"
+
 
 class Request(http.server.BaseHTTPRequestHandler):
 
-	def do_POST(self):
-		self.send_response(200)
-		self.send_header("Content-Type", "text/xml")
-		self.end_headers()
-		data = '<?xml version="1.0" encoding="UTF-8"?><nzb></nzb>'
-		response = xmlrpc.client.dumps((data,), allow_none=False, encoding=None)
-		self.wfile.write(response.encode('utf-8'))
+    def do_POST(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "text/xml")
+        self.end_headers()
+        data = '<?xml version="1.0" encoding="UTF-8"?><nzb></nzb>'
+        response = xmlrpc.client.dumps((data,), allow_none=False, encoding=None)
+        self.wfile.write(response.encode("utf-8"))
+
 
 def run_script():
-	sys.stdout.flush()
-	proc = subprocess.Popen([get_python(), root + '/main.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=os.environ.copy())
-	out, err = proc.communicate()
-	proc.pid
-	ret_code = proc.returncode
-	return (out.decode(), int(ret_code), err.decode())
+    sys.stdout.flush()
+    proc = subprocess.Popen(
+        [get_python(), ROOT_DIR + "/main.py"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=os.environ.copy(),
+    )
+    out, err = proc.communicate()
+    proc.pid
+    ret_code = proc.returncode
+    return (out.decode(), int(ret_code), err.decode())
+
 
 def set_defaults_env():
-	# NZBGet global options
-	os.environ['NZBPP_DIRECTORY'] = tmp_dir
-	os.environ['NZBOP_CONTROLPORT'] = port
-	os.environ['NZBOP_CONTROLIP'] = host
-	os.environ['NZBOP_CONTROLUSERNAME'] = username
-	os.environ['NZBOP_CONTROLPASSWORD'] = password
+    # NZBGet global options
+    os.environ["NZBPP_DIRECTORY"] = TMP_DIR
+    os.environ["NZBOP_CONTROLPORT"] = PORT
+    os.environ["NZBOP_CONTROLIP"] = HOST
+    os.environ["NZBOP_CONTROLUSERNAME"] = USERNAME
+    os.environ["NZBOP_CONTROLPASSWORD"] = PASSWORD
 
-	# script options
-	os.environ['NZBOP_Version'] = '20'
-	os.environ['NZBPO_Verbose'] = 'no'
-	os.environ['NZBPO_Interval'] = '5'
-	os.environ['NZBOP_Version'] = '23.1'
-	os.environ['NZBOP_DownloadRate'] = '15'
+    # script options
+    os.environ["NZBOP_Version"] = "20"
+    os.environ["NZBPO_Verbose"] = "no"
+    os.environ["NZBPO_Interval"] = "5"
+    os.environ["NZBOP_Version"] = "24"
+    os.environ["NZBOP_DownloadRate"] = "15"
+
 
 class Tests(unittest.TestCase):
 
-	def test_command(self):
-		set_defaults_env()
-		os.environ['NZBCP_COMMAND'] = 'Test'
-		server = http.server.HTTPServer((host, int(port)), Request)
-		thread = threading.Thread(target=server.serve_forever)
-		thread.start()
-		[_, code, _] = run_script()
-		server.shutdown()
-		server.server_close()
-		thread.join()
-		self.assertTrue(code, SUCCESS)
+    def test_command(self):
+        set_defaults_env()
+        os.environ["NZBCP_COMMAND"] = "Test"
+        server = http.server.HTTPServer((HOST, int(PORT)), Request)
+        thread = threading.Thread(target=server.serve_forever)
+        thread.start()
+        [_, code, _] = run_script()
+        server.shutdown()
+        server.server_close()
+        thread.join()
+        self.assertEqual(code, SUCCESS)
 
-	def test_nzbget_version(self):
-		set_defaults_env()
-		os.environ['NZBOP_Version'] = '22'
-		server = http.server.HTTPServer((host, int(port)), Request)
-		thread = threading.Thread(target=server.serve_forever)
-		thread.start()
-		[_, code, _] = run_script()
-		server.shutdown()
-		server.server_close()
-		thread.join()
-		self.assertTrue(code, ERROR)
+    def test_nzbget_version(self):
+        set_defaults_env()
+        os.environ["NZBOP_Version"] = "22"
+        server = http.server.HTTPServer((HOST, int(PORT)), Request)
+        thread = threading.Thread(target=server.serve_forever)
+        thread.start()
+        [_, code, _] = run_script()
+        server.shutdown()
+        server.server_close()
+        thread.join()
+        self.assertEqual(code, ERROR)
 
-		os.environ['NZBOP_Version'] = '23.1'
-		server = http.server.HTTPServer((host, int(port)), Request)
-		thread = threading.Thread(target=server.serve_forever)
-		thread.start()
-		[_, code, _] = run_script()
-		server.shutdown()
-		server.server_close()
-		thread.join()
-		self.assertTrue(code, SUCCESS)
+        os.environ["NZBOP_Version"] = "24"
+        server = http.server.HTTPServer((HOST, int(PORT)), Request)
+        thread = threading.Thread(target=server.serve_forever)
+        thread.start()
+        [_, code, _] = run_script()
+        server.shutdown()
+        server.server_close()
+        thread.join()
+        self.assertEqual(code, SUCCESS)
+
+    def test_manifest(self):
+        with open(ROOT_DIR + "/manifest.json", encoding="utf-8") as file:
+            try:
+                json.loads(file.read())
+            except ValueError as e:
+                self.fail("manifest.json is not valid.")
 
 
-if __name__ == '__main__':
-	unittest.main()
+if __name__ == "__main__":
+    unittest.main()
