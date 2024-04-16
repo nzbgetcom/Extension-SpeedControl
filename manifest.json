@@ -1,79 +1,80 @@
 {
-	"main": "main.py",
-	"name": "SpeedControl",
-	"homepage": "https://github.com/nzbgetcom/Extension-SpeedControl/",
-	"kind": "SCHEDULER",
-	"displayName": "Speed Control",
-	"version": "3.0",
-	"author": "Andrey Prygunkov",
-	"license": "GPLv3",
-	"about": "Sets speed limit based on category.",
-	"queueEvents": "",
-	"taskTime": "*",
-	"description": [
-		"This extension monitors download queue and changes download speed limit."
-	],
-	"requirements": [
-		"Requires NZBGet v23.1 and above.", 
-		"Requires Python 3.8 and above to be installed on your system."
-	],
-	"options": [
-		{
-			"name": "Interval",
-			"displayName": "Interval",
-			"value": "5",
-			"description": [
-				"Check interval (seconds)"
-			],
-			"select": []
-		},
-		{
-			"name": "Verbose",
-			"displayName": "Verbose",
-			"value": "no",
-			"description": [
-				"Print more logging messages",
-				"",
-				"For debugging or if you need to report a bug."
-			],
-			"select": ["yes", "no"]
-		},
-		{
-			"section": "Categories",
-			"name": "Name",
-			"displayName": "Name",
-			"value": "",
-			"description": [
-				"Name of the category to monitor."
-			],
-			"select": []
-		},
-		{
-			"section": "Categories",
-			"name": "DownloadRate",
-			"displayName": "Download Rate",
-			"value": 0,
-			"description": [
-				"Speed limit for that category (KB)."
-			],
-			"select": []
-		}
-	],
-	"commands": [
-		{
-			"name": "Test",
-			"action": "Check now",
-			"displayName": "Test",
-			"description": [
-				"Click to test the script."
-			]
-		}
-	],
-	"sections": [
-		{
-			"name": "Categories",
-			"prefix": "Category",
-			"multi": true
-		}
-	]
+    "main": "main.py",
+    "name": "SpeedControl",
+    "homepage": "https://github.com/nzbgetcom/Extension-SpeedControl/",
+    "kind": "SCHEDULER",
+    "displayName": "Speed Control",
+    "version": "3.0",
+    "nzbgetMinVersion": "24",
+    "author": "Andrey Prygunkov",
+    "license": "GPLv3",
+    "about": "Sets speed limit based on category.",
+    "queueEvents": "",
+    "taskTime": "*",
+    "description": [
+        "This extension monitors download queue and changes download speed limit."
+    ],
+    "requirements": [
+        "Requires NZBGet v24 and above.", 
+        "Requires Python 3.8 and above to be installed on your system."
+    ],
+    "options": [
+        {
+            "name": "Interval",
+            "displayName": "Interval",
+            "value": "5",
+            "description": [
+                "Check interval (seconds)"
+            ],
+            "select": []
+        },
+        {
+            "name": "Verbose",
+            "displayName": "Verbose",
+            "value": "no",
+            "description": [
+                "Print more logging messages",
+                "",
+                "For debugging or if you need to report a bug."
+            ],
+            "select": ["yes", "no"]
+        },
+        {
+            "section": "Categories",
+            "name": "Name",
+            "displayName": "Name",
+            "value": "",
+            "description": [
+                "Name of the category to monitor."
+            ],
+            "select": []
+        },
+        {
+            "section": "Categories",
+            "name": "DownloadRate",
+            "displayName": "Download Rate",
+            "value": 0,
+            "description": [
+                "Speed limit for that category (KB)."
+            ],
+            "select": []
+        }
+    ],
+    "commands": [
+        {
+            "name": "Test",
+            "action": "Check now",
+            "displayName": "Test",
+            "description": [
+                "Click to test the script."
+            ]
+        }
+    ],
+    "sections": [
+        {
+            "name": "Categories",
+            "prefix": "Category",
+            "multi": true
+        }
+    ]
 }
