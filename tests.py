@@ -83,7 +83,6 @@ def set_defaults_env():
     os.environ["NZBOP_Version"] = "20"
     os.environ["NZBPO_Verbose"] = "no"
     os.environ["NZBPO_Interval"] = "5"
-    os.environ["NZBOP_Version"] = "24"
     os.environ["NZBOP_DownloadRate"] = "15"
 
 
@@ -92,28 +91,6 @@ class Tests(unittest.TestCase):
     def test_command(self):
         set_defaults_env()
         os.environ["NZBCP_COMMAND"] = "Test"
-        server = http.server.HTTPServer((HOST, int(PORT)), Request)
-        thread = threading.Thread(target=server.serve_forever)
-        thread.start()
-        [_, code, _] = run_script()
-        server.shutdown()
-        server.server_close()
-        thread.join()
-        self.assertEqual(code, SUCCESS)
-
-    def test_nzbget_version(self):
-        set_defaults_env()
-        os.environ["NZBOP_Version"] = "22"
-        server = http.server.HTTPServer((HOST, int(PORT)), Request)
-        thread = threading.Thread(target=server.serve_forever)
-        thread.start()
-        [_, code, _] = run_script()
-        server.shutdown()
-        server.server_close()
-        thread.join()
-        self.assertEqual(code, ERROR)
-
-        os.environ["NZBOP_Version"] = "24"
         server = http.server.HTTPServer((HOST, int(PORT)), Request)
         thread = threading.Thread(target=server.serve_forever)
         thread.start()

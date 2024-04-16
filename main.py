@@ -3,6 +3,7 @@
 # Speed limit extension script for NZBGet.
 #
 # Copyright (C) 2021 Andrey Prygunkov <hugbug@users.sourceforge.net>
+# Copyright (C) 2024 Denis <denis@nzbget.com>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by
@@ -29,13 +30,6 @@ import base64
 # Script exit codes defined by NZBGet
 SCRIPT_SUCCESS = 93
 SCRIPT_ERROR = 94
-
-# Check if the script is called from nzbget 24 or later
-nzbget_version = float(os.environ.get("NZBOP_Version", "1")[0:4])
-if nzbget_version < 24:
-    print("*** NZBGet extension script ***")
-    print("This script is supposed to be called from nzbget (24 or later).")
-    sys.exit(SCRIPT_ERROR)
 
 # Check if all script options are available
 required_options = ("NZBPO_Interval", "NZBPO_Interval")
